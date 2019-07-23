@@ -50,7 +50,7 @@ export default class StockDetails extends React.Component {
 						<Text>Price:</Text>
 					</View>
 					<View style={{ flex: 1, margin: 10, paddingRight: 10 }}>
-						<Text style={{ paddingRight: 10, textAlign: 'right' }}>{item.price.amount}</Text>
+						<Text style={{ paddingRight: 10, textAlign: 'right' }}>{item.price.amount.toFixed(2)}</Text>
 					</View>
 				</View>
 
@@ -59,7 +59,7 @@ export default class StockDetails extends React.Component {
 						<Text>Change:</Text>
 					</View>
 					<View style={{ flex: 1, margin: 10, paddingRight: 10 }}>
-						<Text style={{ paddingRight: 10, textAlign: 'right' }}>{item.percent_change}%</Text>
+						<Text style={{ paddingRight: 10, textAlign: 'right' }}>{item.percent_change.toFixed(2)}%</Text>
 					</View>
 				</View>
 
@@ -68,7 +68,9 @@ export default class StockDetails extends React.Component {
 						<Text>Volume:</Text>
 					</View>
 					<View style={{ flex: 1, margin: 10, paddingRight: 10 }}>
-						<Text style={{ paddingRight: 10, textAlign: 'right' }}>{item.volume}</Text>
+						<Text style={{ paddingRight: 10, textAlign: 'right' }}>
+							{item.volume.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}
+						</Text>
 					</View>
 				</View>
 			</View>
