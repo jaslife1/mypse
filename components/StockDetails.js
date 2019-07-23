@@ -10,19 +10,19 @@ export default class StockDetails extends React.Component {
 	}
 
 	componentDidMount() {
-		this.timer = setInterval(() => this.getStockDetail(), 60000); // 60 seconds
+		this.timer = setInterval(() => this.getStockDetail(), 30000); // 60 seconds
 	}
 
-	componentWillMount() {
-		this.timer = null;
+	componentWillUnmount() {
+		clearInterval(this.timer);
 	}
 
 	async getStockDetail() {
-		return fetch('http://phisix-api.appspot.com/stocks/SSP.json')
+		return fetch('http://phisix-api.appspot.com/stocks/MEG.json')
 			.then((response) => response.json())
 			.then((responseJson) => {
 				this.setState({
-					item: responseJson.stock
+					item: responseJson.stock[0]
 				});
 			})
 			.catch((error) => {
@@ -32,6 +32,7 @@ export default class StockDetails extends React.Component {
 
 	render() {
 		const item = this.state.item;
+		console.log(item);
 		return (
 			<View style={{ flex: 1, padding: 10 }}>
 				{/* <Button title="Back Home" onPress={() => this.props.navigation.navigate('Home')} /> */}

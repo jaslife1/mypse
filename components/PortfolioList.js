@@ -1,31 +1,53 @@
 import React, { Component } from 'react';
 import { View, Button, FlatList, ActivityIndicator, StyleSheet, TouchableHighlight, Platform } from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 import { StockItem } from './StockItem';
+import GLOBAL from '../global';
 
 export default class PortfolioList extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { isLoading: true };
+		this.state = {
+			isLoading: true,
+			stocks: GLOBAL.stocks,
+			dataSource: []
+		};
 	}
 
-	componentDidMount() {
-		this.getStockDetail(); // Call one time at the beginning
-		this.timer = setInterval(() => this.getStockDetail(), 60000); // 60 seconds
-	}
-
-	async getStockDetail() {
-		return fetch('http://phisix-api.appspot.com/stocks/SSP.json')
+	async getStockDetail(stock) {
+		return fetch('http://phisix-api.appspot.com/stocks/' + stock + '.json')
 			.then((response) => response.json())
 			.then((responseJson) => {
 				this.setState({
 					isLoading: false,
-					dataSource: responseJson.stock
+					dataSource: [ ...this.state.dataSource, responseJson.stock[0] ]
 				});
 			})
 			.catch((error) => {
 				console.error(error);
 			});
 	}
+
+	_willBlur = (payload) => {
+		// console.log('Will blur ', payload);
+	};
+
+	_didBlur = (payload) => {
+		// console.log('Did blur ', payload);
+	};
+
+	_willFocus = (payload) => {
+		// console.log('Will focus ', payload);
+		this.setState({ stocks: GLOBAL.stocks });
+	};
+
+	_didFocus = (payload) => {
+		this.state.dataSource = [];
+		for (var stock of this.state.stocks) {
+			this.getStockDetail(stock); // Call one time at the beginning
+			//this.timer = setInterval(() => this.getStockDetail(), 30000); // 60 seconds
+		}
+	};
 
 	_showDetail = (item) => {
 		this.props.navigation.navigate('Details', {
@@ -38,17 +60,42 @@ export default class PortfolioList extends React.Component {
 	_renderItem = ({ item }) => <StockItem item={item} onPressItem={this._showDetail} />;
 
 	render() {
+		if (this.state.stocks.length == 0) {
+			return (
+				<View style={{ flex: 1, padding: 20 }}>
+					<NavigationEvents
+						onWillFocus={this._willFocus}
+						onDidFocus={this._didFocus}
+						onWillBlur={this._willBlur}
+						onDidBlur={this._didBlur}
+					/>
+					<Button title="Add" onPress={() => this.props.navigation.navigate('AllStocks')} />
+				</View>
+			);
+		}
 		if (this.state.isLoading) {
 			return (
 				<View style={{ flex: 1, padding: 20 }}>
+					<NavigationEvents
+						onWillFocus={this._willFocus}
+						onDidFocus={this._didFocus}
+						onWillBlur={this._willBlur}
+						onDidBlur={this._didBlur}
+					/>
 					<ActivityIndicator />
 				</View>
 			);
 		}
-
+		// console.log(this.state.dataSource);
 		return (
 			<View style={{ flex: 1 }}>
 				{/* <Button title="Details" onPress={() => this.props.navigation.navigate('Details')} /> */}
+				<NavigationEvents
+					onWillFocus={this._willFocus}
+					onDidFocus={this._didFocus}
+					onWillBlur={this._willBlur}
+					onDidBlur={this._didBlur}
+				/>
 				<FlatList
 					data={this.state.dataSource}
 					keyExtractor={this._keyExtractor}

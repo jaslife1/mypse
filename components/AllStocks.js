@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Button, ActivityIndicator, FlatList } from 'react-native';
-
 import { StockItem } from './StockItem';
+import GLOBAL from '../global';
 
 export default class AllStocks extends React.Component {
 	constructor(props) {
@@ -22,8 +22,15 @@ export default class AllStocks extends React.Component {
 				console.error(error);
 			});
 	}
+
+	_addStock = (item) => {
+		console.log(item);
+		GLOBAL.stocks = [ ...GLOBAL.stocks, item.symbol ];
+		this.props.navigation.navigate('Home');
+	};
+
 	_keyExtractor = (item, index) => '' + index;
-	_renderItem = ({ item }) => <StockItem item={item} />;
+	_renderItem = ({ item }) => <StockItem item={item} onPressItem={this._addStock} />;
 
 	render() {
 		if (this.state.isLoading) {
