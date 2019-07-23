@@ -1,3 +1,4 @@
 module.exports = {
-	stocks: []
+	stocks: [],
+	homeScreen: null
 };

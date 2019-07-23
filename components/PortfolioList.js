@@ -15,6 +15,8 @@ export default class PortfolioList extends React.Component {
 			stocks: GLOBAL.stocks,
 			dataSource: []
 		};
+
+		GLOBAL.homeScreen = this;
 	}
 
 	async getStockDetail(stock) {
@@ -41,14 +43,14 @@ export default class PortfolioList extends React.Component {
 
 	_willFocus = (payload) => {
 		// console.log('Will focus ', payload);
-		this.setState({ stocks: GLOBAL.stocks });
 	};
 
 	_didFocus = (payload) => {
+		// console.log('Did focus ', payload);
 		this.state.dataSource = [];
 		for (var stock of this.state.stocks) {
 			this.getStockDetail(stock); // Call one time at the beginning
-			//this.timer = setInterval(() => this.getStockDetail(), 30000); // 60 seconds
+			// this.timer = setInterval(() => this.getStockDetail(), 30000); // 60 seconds
 		}
 	};
 
@@ -77,6 +79,7 @@ export default class PortfolioList extends React.Component {
 				</View>
 			);
 		}
+
 		if (this.state.isLoading) {
 			return (
 				<View style={{ flex: 1, padding: 20 }}>

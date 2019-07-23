@@ -27,8 +27,12 @@ export default class AllStocks extends React.Component {
 	}
 
 	_addStock = (item) => {
-		console.log(item);
-		GLOBAL.stocks = [ ...GLOBAL.stocks, item.symbol ];
+		//console.log(item);
+		//GLOBAL.stocks = [ ...GLOBAL.stocks, item.symbol ];
+		GLOBAL.homeScreen.setState({
+			stocks: [ ...GLOBAL.homeScreen.state.stocks, item.symbol ]
+		});
+		console.log(GLOBAL.homeScreen.state.stocks);
 		this.props.navigation.navigate('Home');
 	};
 
