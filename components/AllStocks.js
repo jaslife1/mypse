@@ -18,7 +18,7 @@ export default class AllStocks extends React.Component {
 			.then((responseJson) => {
 				this.setState({
 					isLoading: false,
-					dataSource: responseJson.stock
+					stocks: responseJson.stock
 				});
 			})
 			.catch((error) => {
@@ -30,9 +30,9 @@ export default class AllStocks extends React.Component {
 		//console.log(item);
 		//GLOBAL.stocks = [ ...GLOBAL.stocks, item.symbol ];
 		GLOBAL.homeScreen.setState({
-			stocks: [ ...GLOBAL.homeScreen.state.stocks, item.symbol ]
+			stocks: [ ...GLOBAL.homeScreen.state.stocks, item ]
 		});
-		console.log(GLOBAL.homeScreen.state.stocks);
+		// console.log(GLOBAL.homeScreen.state.stocks);
 		this.props.navigation.navigate('Home');
 	};
 
@@ -51,12 +51,8 @@ export default class AllStocks extends React.Component {
 		return (
 			<View style={{ flex: 1 }}>
 				{/* <Button title="Back Home" onPress={() => this.props.navigation.navigate('Home')} /> */}
-				<FlatList
-					data={this.state.dataSource}
-					keyExtractor={this._keyExtractor}
-					renderItem={this._renderItem}
-				/>
-				{/* <Button title="Get" onPress={() => console.log(this.state.dataSource)} /> */}
+				<FlatList data={this.state.stocks} keyExtractor={this._keyExtractor} renderItem={this._renderItem} />
+				{/* <Button title="Get" onPress={() => console.log(this.state.stocks)} /> */}
 			</View>
 		);
 	}

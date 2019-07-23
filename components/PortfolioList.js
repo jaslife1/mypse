@@ -12,26 +12,25 @@ export default class PortfolioList extends React.Component {
 		super(props);
 		this.state = {
 			isLoading: true,
-			stocks: GLOBAL.stocks,
-			dataSource: []
+			stocks: []
 		};
 
 		GLOBAL.homeScreen = this;
 	}
 
-	async getStockDetail(stock) {
-		return fetch('http://phisix-api.appspot.com/stocks/' + stock + '.json')
-			.then((response) => response.json())
-			.then((responseJson) => {
-				this.setState({
-					isLoading: false,
-					dataSource: [ ...this.state.dataSource, responseJson.stock[0] ]
-				});
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	}
+	// async getStockDetail(stock) {
+	// 	return fetch('http://phisix-api.appspot.com/stocks/' + stock + '.json')
+	// 		.then((response) => response.json())
+	// 		.then((responseJson) => {
+	// 			this.setState({
+	// 				isLoading: false,
+	// 				stocks: [ ...this.state.stocks, responseJson.stock[0] ]
+	// 			});
+	// 		})
+	// 		.catch((error) => {
+	// 			console.error(error);
+	// 		});
+	// }
 
 	_willBlur = (payload) => {
 		// console.log('Will blur ', payload);
@@ -47,11 +46,11 @@ export default class PortfolioList extends React.Component {
 
 	_didFocus = (payload) => {
 		// console.log('Did focus ', payload);
-		this.state.dataSource = [];
-		for (var stock of this.state.stocks) {
-			this.getStockDetail(stock); // Call one time at the beginning
-			// this.timer = setInterval(() => this.getStockDetail(), 30000); // 60 seconds
-		}
+		// this.state.stocks = [];
+		// for (var stock of this.state.stocks) {
+		// 	this.getStockDetail(stock); // Call one time at the beginning
+		// 	// this.timer = setInterval(() => this.getStockDetail(), 30000); // 60 seconds
+		// }
 	};
 
 	_showDetail = (item) => {
@@ -63,7 +62,9 @@ export default class PortfolioList extends React.Component {
 
 	_keyExtractor = (item, index) => '' + index;
 
-	_renderItem = ({ item }) => <StockItem item={item} onPressItem={this._showDetail} />;
+	_renderItem = ({ item }) => {
+		return <StockItem item={item} onPressItem={this._showDetail} />;
+	};
 
 	render() {
 		if (this.state.stocks.length == 0) {
@@ -80,20 +81,20 @@ export default class PortfolioList extends React.Component {
 			);
 		}
 
-		if (this.state.isLoading) {
-			return (
-				<View style={{ flex: 1, padding: 20 }}>
-					<NavigationEvents
-						onWillFocus={this._willFocus}
-						onDidFocus={this._didFocus}
-						onWillBlur={this._willBlur}
-						onDidBlur={this._didBlur}
-					/>
-					<ActivityIndicator />
-				</View>
-			);
-		}
-		// console.log(this.state.dataSource);
+		// if (this.state.isLoading) {
+		// 	return (
+		// 		<View style={{ flex: 1, padding: 20 }}>
+		// 			<NavigationEvents
+		// 				onWillFocus={this._willFocus}
+		// 				onDidFocus={this._didFocus}
+		// 				onWillBlur={this._willBlur}
+		// 				onDidBlur={this._didBlur}
+		// 			/>
+		// 			<ActivityIndicator />
+		// 		</View>
+		// 	);
+		// }
+		// console.log(this.state.stocks);
 		return (
 			<View style={{ flex: 1 }}>
 				{/* <Button title="Details" onPress={() => this.props.navigation.navigate('Details')} /> */}
@@ -103,11 +104,7 @@ export default class PortfolioList extends React.Component {
 					onWillBlur={this._willBlur}
 					onDidBlur={this._didBlur}
 				/>
-				<FlatList
-					data={this.state.dataSource}
-					keyExtractor={this._keyExtractor}
-					renderItem={this._renderItem}
-				/>
+				<FlatList data={this.state.stocks} keyExtractor={this._keyExtractor} renderItem={this._renderItem} />
 
 				<Button title="Add" onPress={() => this.props.navigation.navigate('AllStocks')} />
 			</View>

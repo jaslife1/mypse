@@ -37,7 +37,6 @@ export default class StockDetails extends React.Component {
 
 	render() {
 		const item = this.state.item;
-		console.log(item);
 		return (
 			<View style={{ flex: 1, padding: 10 }}>
 				{/* <Button title="Back Home" onPress={() => this.props.navigation.navigate('Home')} /> */}
