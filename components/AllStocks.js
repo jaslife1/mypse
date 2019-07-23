@@ -4,6 +4,9 @@ import { StockItem } from './StockItem';
 import GLOBAL from '../global';
 
 export default class AllStocks extends React.Component {
+	static navigationOptions = {
+		title: 'All PSE Stocks'
+	};
 	constructor(props) {
 		super(props);
 		this.state = { isLoading: true };

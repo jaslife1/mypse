@@ -5,6 +5,9 @@ import { StockItem } from './StockItem';
 import GLOBAL from '../global';
 
 export default class PortfolioList extends React.Component {
+	static navigationOptions = {
+		title: 'Stock Watch List'
+	};
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -51,6 +54,7 @@ export default class PortfolioList extends React.Component {
 
 	_showDetail = (item) => {
 		this.props.navigation.navigate('Details', {
+			symbol: item.symbol,
 			item: item
 		});
 	};

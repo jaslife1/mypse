@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import { View, Button, FlatList, Text, StyleSheet, TouchableHighlight, Platform } from 'react-native';
 
 export default class StockDetails extends React.Component {
+	static navigationOptions = ({ navigation }) => {
+		return {
+			title: navigation.getParam('symbol', 'Details')
+		};
+	};
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -10,25 +15,25 @@ export default class StockDetails extends React.Component {
 	}
 
 	componentDidMount() {
-		this.timer = setInterval(() => this.getStockDetail(), 30000); // 60 seconds
+		//this.timer = setInterval(() => this.getStockDetail(), 30000); // 60 seconds
 	}
 
 	componentWillUnmount() {
 		clearInterval(this.timer);
 	}
 
-	async getStockDetail() {
-		return fetch('http://phisix-api.appspot.com/stocks/MEG.json')
-			.then((response) => response.json())
-			.then((responseJson) => {
-				this.setState({
-					item: responseJson.stock[0]
-				});
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	}
+	// async getStockDetail() {
+	// 	return fetch('http://phisix-api.appspot.com/stocks/MEG.json')
+	// 		.then((response) => response.json())
+	// 		.then((responseJson) => {
+	// 			this.setState({
+	// 				item: responseJson.stock[0]
+	// 			});
+	// 		})
+	// 		.catch((error) => {
+	// 			console.error(error);
+	// 		});
+	// }
 
 	render() {
 		const item = this.state.item;
@@ -50,7 +55,9 @@ export default class StockDetails extends React.Component {
 						<Text>Price:</Text>
 					</View>
 					<View style={{ flex: 1, margin: 10, paddingRight: 10 }}>
-						<Text style={{ paddingRight: 10, textAlign: 'right' }}>{item.price.amount.toFixed(2)}</Text>
+						<Text style={{ paddingRight: 10, textAlign: 'right' }}>
+							{item.price.amount.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}
+						</Text>
 					</View>
 				</View>
 

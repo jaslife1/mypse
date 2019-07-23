@@ -25,7 +25,9 @@ export class StockItem extends React.Component {
 						<Text>{this.props.item.symbol}</Text>
 					</View>
 					<View style={{ flex: 1, paddingRight: 10 }}>
-						<Text style={{ textAlign: 'right' }}>{this.props.item.price.amount.toFixed(2)}</Text>
+						<Text style={{ textAlign: 'right' }}>
+							{this.props.item.price.amount.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}
+						</Text>
 					</View>
 				</View>
 			</TouchableHighlight>
